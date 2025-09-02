@@ -3,6 +3,7 @@ package com.example.springrest.controller;
 import com.example.springrest.dto.UserDto;
 import com.example.springrest.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -42,4 +43,9 @@ public class UserApiController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    // 특정 사용자 조회 : 숫자로 된 개별 id/pk
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto.Response> getUserById(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findUserById(id));
+    }
 }
