@@ -47,5 +47,21 @@ public class UserApiController {
     @GetMapping("/{id}")
     public ResponseEntity<UserDto.Response> getUserById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.findUserById(id));
+        // id는 @PathVariable로부터 가져옴
+    }
+
+    // 사용자 정보 수정 (PUT)
+    // GET, POST -> 웹에서 PAGE 기준으로 가장 많이 사용함
+    // REST -> HTTP Verb GET, POST, PUT, DELETE, ...
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDto.Response> updateUser(@PathVariable Long id, @RequestBody UserDto.UpdateRequest dto) {
+        UserDto.Response updateUser = userService.updateUser(id, dto);
+        return ResponseEntity.ok(updateUser);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 }
