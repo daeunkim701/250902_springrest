@@ -3,3 +3,8 @@ spring:
     name: springrest
   profiles:
     active: dev
+  jpa:
+    hibernate:
+      # prod에서 덮어씌워줄 것 validate로
+      ddl-auto: update
+    show-sql: true
