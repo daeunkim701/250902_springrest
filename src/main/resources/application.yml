@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: springrest
+  profiles:
+    active: dev
