@@ -24,9 +24,9 @@ public class UserService {
 
     @Transactional // 쓰기 조회 락을 건다!
     public UserDto.Response createUser(UserDto.CreateRequest dto) {
-        User savedUser = userRepository.save(dto.toEntity());
+        User savedUser = userRepository.save(dto.toEntity()); // dto를 entity로 바꾸고 save로 레포에 저장한 걸
         // PK -> auto increment, audit(생성, 수정일..)
-        return UserDto.Response.fromEntity(savedUser);
+        return UserDto.Response.fromEntity(savedUser); // 다시 fromEntity로 response로 받음
     }
 
     // READ (ONE, ALL)
@@ -46,4 +46,25 @@ public class UserService {
     }
     // DTO랑 Entity랑 구분 안 해서 파파존스에서 DB를 걍 통째로 frontend로 보내버렸다고 함
 
+    // UPDATE
+    @Transactional
+    public UserDto.Response updateUser(Long id, UserDto.UpdateRequest dto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("사용자 찾을 수 없음 : " + id));
+        // Dirty Checking
+        user.update(
+                dto.username(), dto.email()
+        ); // 아예 해당 내용들을 모두 교체 // put 형태
+        // DB에 반영
+        return UserDto.Response.fromEntity(user);
+    }
+
+    // DELETE
+    @Transactional
+    public void deleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new IllegalArgumentException("사용자 찾을 수 없음 : " + id);
+        }
+        userRepository.deleteById(id);
+    }
 }
